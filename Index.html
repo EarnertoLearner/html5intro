@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<meta name="keywords" content="">
+<meta encoding="utf-8">
+
+<style>
+.wrapping {
+   display:grid;
+  grid-template-columns: auto repeat(3, 1fr);
+  grid-template-rows: 1fr 3fr auto 1fr;
+  grid-template-areas:
+	"sidebar header header header"
+	"sidebar main1 main2 main3"
+	"sidebar main1 main2 main3"
+	"sidebar footer footer footer";
+}
+.sidebar1{
+	grid-area: sidebar;
+	background-color: red;
+}
+.head{
+	grid-area: header;
+	background-color: firebrick;
+}
+.m1{
+	grid-area: main1;
+	background-color: red;
+}
+.m2{
+	grid-area: main2;
+	background-color: firebrick;
+}
+.m3{
+	grid-area: main3;
+	background-color: red;
+}
+.footer1{
+	grid-area: footer;
+	background-color: firebrick;
+}
+</style>
+</head>
+<body>
+<div class="wrapping">
+	<div class="head">head</div>
+	<div class="sidebar1">side1</div>
+	<div class="m1">m1</div>
+	<div class="m2">m2</div>
+	<div class="m3">m3</div>
+	<div class="footer1">foot</div>
+</div>
+
+</body>
+</html>
