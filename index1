@@ -6,19 +6,6 @@
 <meta encoding="utf-8">
 <style>
 
-/* 
-body {
-margin: 0;
-  display:grid;
-  grid-template-columns: auto 27% 27% 27%;
-  grid-template-rows: 8% 30% auto 10%;
-  grid-template-areas:
-	"sidebar header header header"
-	"sidebar header header header"
-	"sidebar section1 Section2 Section 3"
-	"sidebar main main main"
-	"sidebar footer footer footer"
-*/
 .wrapping > div {
   grid-gap: 1px;
   } 
