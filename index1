@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<meta name="keywords" content="">
+<meta encoding="utf-8">
+<style>
+
+/* 
+body {
+margin: 0;
+  display:grid;
+  grid-template-columns: auto 27% 27% 27%;
+  grid-template-rows: 8% 30% auto 10%;
+  grid-template-areas:
+	"sidebar header header header"
+	"sidebar header header header"
+	"sidebar section1 Section2 Section 3"
+	"sidebar main main main"
+	"sidebar footer footer footer"
+*/
+.wrapping > div {
+  grid-gap: 1px;
+  } 
+.wrapping{
+  display:grid;
+  grid-template-columns: repeat(6,1fr);
+  grid-auto-rows: minmax(100px,auto);
+  background-color: gray;
+}
+  .inbox3{
+  display:grid;
+  grid-template-columns: repeat(3,1fr);
+  grid-auto-rows: minmax(100px, auto);
+  
+  
+}
+  .inbox2{
+	display:grid;
+	
+}
+  .box{
+  padding:1em;
+  grid-column: 1/2;
+  grid-row: 2/7;
+  background-color: #088c4a;
+  }
+  .box2{
+  grid-column: 1/7;
+  grid-row: 1/2;
+  background-color:#18ad63;
+  }
+  .box3{
+  grid-column:2/5;
+  grid-row:2/5;
+  background-color: lightgray;
+  align-items: start;
+  }
+  .box4{
+  grid-column:6/7;
+  grid-row:2/5;
+  background-color: #208c57;
+  }
+  .box5{
+  grid-column:5/6;
+  grid-row:2/5;
+  background-color: #208c57;
+  }
+  .box6{
+  grid-column:2/5;
+  grid-row:5/7;
+  background-color: #177537 /*#067840*/;
+  }
+  .box6a{
+  display:grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-auto-rows:minmax(100px, auto);
+  background-color: #18ad63 /*#208c57*/;
+  }
+  .box7{
+  grid-column:1/7;
+  grid-row:7/8;
+  background-color:#208c57;
+  }
+  .box8{
+  grid-column:1/7;
+  grid-row:8/9;
+  background-color: gray;
+  }
+  .dynamic {
+  text-align: center;
+  background-color: black;
+  color: white;
+  margin: 10px;
+  padding: 10px;
+}
+  .boxb1{
+  grid-column:1/2;
+  grid-row:2/3;
+  background-color: #208c57;
+  }
+  .boxb2{
+  grid-column:1/2;
+  grid-row:3/4;
+  background-color: #208c57;
+  }
+  .boxb3{
+  grid-column:1/2;
+  grid-row:4/5;
+  background-color: #208c57;
+  }
+  .boxb4{
+  grid-column:1/2;
+  grid-row:auto;
+  background-color: #208c57;
+  }
+  .boxb5{
+  grid-column:1/2;
+  grid-row:auto;
+  background-color: #208c57;
+  }
+/* Add a black background color to the top navigation */
+.topnav {
+  background-color: #333;
+  overflow: hidden;
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+/* Change the color of links on hover */
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+/* Add a color to the active/current link */
+.topnav a.active {
+  background-color: black;
+  color: white;
+}
+.output {
+  selectElement.value;
+}
+</style>
+</head>
+<body>
+<div class="wrapping">
+  
+   <div class="box2"><img src="" height=300 width=100% border="5px" alt="banner"><h1 class="dynamic"> 2020 Dynasty Draft </h1>
+<table align="center">
+<tr>
+<td><a href="#rd1">Round 1</a></td>
+<td><a href="#rd2">Round 2</a></td>
+<td><a href="#rd3">Round 3</a></td>
+<td><a href="#rd4">Round 4</a></td>
+</tr>
+</table><hr />
+</p>
+<div class="topnav">
+  <a class="active" href="#home">Home</a>
+  <a href="#players">Players</a>
+  <a href="#teams">Teams</a>
+  <a href="#about">About</a>
+</div></div>
+  <div class="box3">
+ 	<div class="inbox3">
+	  <div>1</div>
+	  <div>2
+		<h1>Current selection:{team}</h1><p><h1>Timer
+<div id="clockdiv"></div>
+<button id="pause">Pause</button>
+<button id="resume">Resume</button>
+<button id="reset">Reset</button>
+<br><br>
+<script>
+// 3 minutes from now
+var time_in_minutes = 3;
+var current_time = Date.parse(new Date());
+var deadline = new Date(current_time + time_in_minutes*60*1000);
+
+
+function time_remaining(endtime){
+	var t = Date.parse(endtime) - Date.parse(new Date());
+	var seconds = Math.floor( (t/1000) % 60 );
+	var minutes = Math.floor( (t/1000/60) % 60 );
+	var hours = Math.floor( (t/(1000*60*60)) % 24 );
+	var days = Math.floor( t/(1000*60*60*24) );
+	return {'total':t, 'days':days, 'hours':hours, 'minutes':minutes, 'seconds':seconds};
+}
+
+var timeinterval;
+function run_clock(id,endtime){
+	var clock = document.getElementById(id);
+	function update_clock(){
+		var t = time_remaining(endtime);
+		clock.innerHTML = 'Remaining: '+t.minutes+':'+t.seconds;
+		if(t.total<=0){ clearInterval(timeinterval); }
+	}
+	update_clock(); // run function once at first to avoid delay
+	timeinterval = setInterval(update_clock,1000);
+}
+run_clock('clockdiv',deadline);
+
+
+var paused = false; // is the clock paused?
+var time_left; // time left on the clock when paused
+
+function pause_clock(){
+	if(!paused){
+		paused = true;
+		clearInterval(timeinterval); // stop the clock
+		time_left = time_remaining(deadline).total; // preserve remaining time
+	}
+}
+
+function resume_clock(){
+	if(paused){
+		paused = false;
+
+		// update the deadline to preserve the amount of time remaining
+		deadline = new Date(Date.parse(new Date()) + time_left);
+
+		// start the clock
+		run_clock('clockdiv',deadline);
+	}
+}
+
+// handle pause and resume button clicks
+document.getElementById('pause').onclick = pause_clock;
+document.getElementById('resume').onclick = resume_clock;
+</script>
+		</p>
+	  </div>
+	  <div>3</div>
+	  <div>4</div>
+	  <div>5</div>
+	  <div>6</div>
+	  <div>7</div>
+	  <div>8</div>
+	  <div>9</div>
+	  
+	</div>
+  </div>
+  <div class="box4">b4 
+  </div>
+  <div class="box5">
+
+<!--need submit button to get the value of the selected box-->
+<legend>Players Available </legend>
+<select id="select1">
+<option>Brandin Cooks</option>
+<option>Corey Davis</option>
+<option>O.J. Howard</option>
+<option>Parris Campbell</option>
+<option>Darrell Henderson</option>
+<option>J.J. Arcega-Whiteside</option>
+<option>Andy Isabella</option>
+<option>Irv Smith Jr.</option>
+<option>Chase Edmonds</option>
+<option>Jaylen Samuels</option>
+<option>Keke Coutee</option>
+<option>Eric Ebron</option>
+<option>Tre'Quan Smith</option>
+<option>Darwin Thompson</option>
+<option>Dante Pettis</option>
+<option>Justin Jackson</option>
+<option>Benny Snell Jr.</option>
+<option>Miles Boykin</option>
+<option>Josh Reynolds</option>
+<option>Ryquell Armstead</option>
+<option>Mitch Trubisky</option>
+<option>Preston Williams</option>
+<option>DeSean Jackson</option>
+<option>Chris Herndon IV</option>
+<option>Allen Lazard</option>
+<option>Malcolm Brown</option>
+<option>Devin Funchess</option>
+<option>Ito Smith</option>
+<option>DaeSean Hamilton</option>
+<option>Chris Thompson</option>
+<option>Dwayne Haskins</option>
+<option>Ian Thomas</option>
+<option>Hakeem Butler</option>
+<option>Derek Carr</option>
+<option>Jalen Hurd</option>
+<option>Geronimo Allison</option>
+<option>Giovani Bernard</option>
+<option>Nelson Agholor</option>
+<option>Drew Lock</option>
+<option>Ben Roethlisberger</option>
+<option>Dion Lewis</option>
+<option>Trey Burton</option>
+<option>Hunter Renfrow</option>
+<option>KeeSean Johnson</option>
+<option>Kalen Ballage</option>
+<option>Randall Cobb</option>
+<option>Zay Jones</option>
+<option>Kelvin Harmon</option>
+<option>Gus Edwards</option>
+<option>Jakobi Meyers</option>
+<option>Marquise Goodwin</option>
+<option>Bryce Love</option>
+<option>Jalen Richard</option>
+<option>Jonnu Smith</option>
+<option>Josh Gordon</option>
+<option>Rex Burkhead</option>
+<option>Wayne Gallman</option>
+<option>Steven Sims</option>
+<option>Josh Oliver</option>
+<option>Delanie Walker</option>
+<option>Albert Wilson</option>
+<option>Adam Humphries</option>
+<option>Ty Johnson</option>
+<option>Rashard Higgins</option>
+<option>Marqise Lee</option>
+<option>Gardner Minshew II</option>
+<option>Hayden Hurst</option>
+<option>Nick Foles</option>
+<option>Brian Hill</option>
+<option>Andy Dalton</option>
+<option>Jace Sternberger</option>
+<option>Robert Foster</option>
+<option>Blake Jarwin</option>
+<option>Taylor Gabriel</option>
+<option>Deon Cain</option>
+<option>Dexter Williams</option>
+<option>Kendrick Bourne</option>
+<option>Jordan Wilkins</option>
+<option>Ty Montgomery</option>
+<option>Trayveon Williams</option>
+<option>Teddy Bridgewater</option>
+<option>Jimmy Graham</option>
+<option>Trey Quinn</option>
+<option>Mike Davis</option>
+<option>Jordan Reed</option>
+<option>Antonio Callaway</option>
+<option>T.J. Yeldon</option>
+<option>Jonathan Williams</option>
+<option>Darrel Williams</option>
+<option>Olabisi Johnson</option>
+<option>David Moore</option>
+<option>Boston Scott</option>
+<option>Willie Snead</option>
+<option>Justin Watson</option>
+<option>Quincy Enunwa</option>
+<option>Paul Richardson Jr.</option>
+<option>Dare Ogunbowale</option>
+<option>Allen Hurns</option>
+<option>Keelan Cole</option>
+<option>Marcus Mariota</option>
+<option>Cameron Brate</option>
+<option>Josh Adams</option>
+<option>Danny Amendola</option>
+<option>Elijah McGuire</option>
+<option>Riley Ridley</option>
+<option>Tyler Eifert</option>
+<option>Myles Gaskin</option>
+<option>Gary Jennings Jr.</option>
+<option>Demaryius Thomas</option>
+<option>Rodney Anderson</option>
+<option>Darren Fells</option>
+<option>Travis Homer</option>
+<option>Ryan Fitzpatrick</option>
+<option>John Kelly</option>
+<option>Tim Patrick</option>
+<option>Kansas City (KC)</option>
+<option>Taywan Taylor</option>
+<option>Ricky Seals-Jones</option>
+<option>Qadree Ollison</option>
+<option>Dontrell Hilliard</option>
+<option>Kenneth Dixon</option>
+<option>Josh Rosen</option>
+<option>Ka'imi Fairbairn</option>
+<option>Mason Crosby</option>
+<option>Matt Prater</option>
+<option>Jacksonville (JAC)</option>
+<option>Jake Elliott</option>
+<option>Kahale Warring</option>
+<option>Michael Badgley</option>
+<option>Equanimeous St. Brown</option>
+<option>Tyrod Taylor</option>
+<option>Josh Doctson</option>
+<option>Nick Mullens</option>
+<option>Jeff Wilson</option>
+<option>Philadelphia (PHI)</option>
+<option>Byron Pringle</option>
+<option>C.J. Anderson</option>
+<option>Case Keenum</option>
+<option>Ryan Griffin</option>
+<option>D'Onta Foreman</option>
+<option>Eli Manning</option>
+<option>Donte Moncrief</option>
+<option>Spencer Ware</option>
+<option>Jarrett Stidham</option>
+<option>Theo Riddick</option>
+<option>Corey Clement</option>
+<option>Foster Moreau</option>
+<option>DeAndre Washington</option>
+<option>Doug Baldwin</option>
+<option>Devine Ozigbo</option>
+<option>Jakeem Grant</option>
+<option>Kyle Allen</option>
+<option>Chris Hogan</option>
+<option>Mark Walton</option>
+<option>Bilal Powell</option>
+<option>Ted Ginn</option>
+<option>Will Grier</option>
+<option>Keith Kirkwood</option>
+<option>Houston (HOU)</option>
+<option>Tajae Sharpe</option>
+<option>Jason Witten</option>
+<option>Richie James</option>
+<option>Wendell Smallwood</option>
+<option>Devontae Booker</option>
+<option>Jordan Scarlett</option>
+<option>Bruce Anderson</option>
+<option>Jordan Thomas</option>
+<option>C.J. Prosise</option>
+</select>
+
+<p> Last selection was: <span class="output"></span>
+</p>
+<button onclick="getOption()">Select
+</button> 
+    <script type="text/javascript"> 
+        function getOption() { 
+            selectElement = document.querySelector('#select1'); 
+                      
+            output =  
+              selectElement.options[selectElement.selectedIndex].value; 
+  
+            document.querySelector('.output').textContent = output; 
+        } 
+    </script> 
+
+
+  </div>
+  <div class="box6">
+	<div class="box6a">
+	<div>6-1 Team1
+	<ul>
+	<li>1</li>
+	<li>2</li>
+	<li>3</li>
+	<li>4</li>
+	</ul>
+	</div>
+	<div>6-2 Team2
+	<ul>
+	<li>1</li>
+	<li>2</li>
+	<li>3</li>
+	<li>4</li>
+	</ul>
+	</div>
+	<div>6-3 Team3
+	<ul>
+	<li>1</li>
+	<li>2</li>
+	<li>3</li>
+	<li>4</li>
+	</ul>
+	</div>
+	<div>6-4 Team4
+	<ul>
+	<li>1</li>
+	<li>2</li>
+	<li>3</li>
+	<li>4</li>
+	</ul>
+	</div>
+	<div>6-5 Team5
+	<ul>
+	<li>1</li>
+	<li>2</li>
+	<li>3</li>
+	<li>4</li>
+	</ul>
+	</div>
+	<div>6-6 Team6
+	<ul>
+	<li>1</li>
+	<li>2</li>
+	<li>3</li>
+	<li>4</li>
+	</ul>
+	</div>
+	<div>6-7 Team7
+	<ul>
+	<li>1</li>
+	<li>2</li>
+	<li>3</li>
+	<li>4</li>
+	</ul>
+	</div>
+	<div>6-8 Team8
+	<ul>
+	<li>1</li>
+	<li>2</li>
+	<li>3</li>
+	<li>4</li>
+	</ul>
+	</div>
+	<div>6-9 Team9
+	<ul>
+	<li>1</li>
+	<li>2</li>
+	<li>3</li>
+	<li>4</li>
+	</ul>
+	</div>
+	<div>6-10 Team10
+	<ul>
+	<li>1</li>
+	<li>2</li>
+	<li>3</li>
+	<li>4</li>
+	</ul>
+	</div>
+	</div>
+  </div>
+  <div class="box7">b7</div>
+  <div class="box8"><hr />
+<footer style="background-color: gray">
+
+<strong>2020 NFL ESPN dynasty league draft</strong>c<br />
+<h3><a href="https://www.ESPN.com" target="_blank"> Go to ESPN </a></h3>
+</footer>footer</div>
+  <div class="boxb1"><h1> Round selection order </h1><br />
+  </div>
+  <div class="boxb2"><h2><a name="rd1"> Round 1 </a></h2>
+<ol>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+</ol>
+  </div>
+  <div class="boxb3"><h2><a name="rd2"> Round 2 </a></h2>
+<ol>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+</ol>
+  </div>
+  <div class="boxb4"><h2><a name="rd3"> Round 3 </a></h2>
+<ol>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+</ol>
+  </div>
+  <div class="boxb5"><h2><a name="rd4"> Round 4 </a></h2>
+<ol>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+</ol>
+  </div>
+
+</div>
+
+</body>
+</html>
